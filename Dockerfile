@@ -7,7 +7,6 @@ LABEL Author Endkind Ender <endkind.ender@endkind.net>
 
 COPY getVelocity.sh /endkind/getVelocity.sh
 COPY docker-entrypoint.sh /endkind/docker-entrypoint.sh
-COPY LICENSE /LICENSE
 
 RUN chmod +x /endkind/getVelocity.sh
 RUN chmod +x /endkind/docker-entrypoint.sh
