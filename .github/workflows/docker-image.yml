@@ -59,13 +59,14 @@ jobs:
     - name: Load Docker image
       run: docker load < image.tar
 
+    - name: Prepare Test
+      run: |
+        pip install .github/requirements.txt
+
     - name: Test the Docker image
       run: |
         # Start the container
         CONTAINER_ID=$(docker run -it -d -p 25565:25577 endkind/velocity:$VERSION)
-
-        # Install telnet on the host
-        sudo apt-get update && sudo apt-get install -y telnet
 
         # Wait for the container to initialize and check the port from the host
         MAX_RETRIES=60
@@ -78,8 +79,8 @@ jobs:
           fi
 
           # Check if port 25565 is open
-          TELNET_STATUS=$(echo quit | telnet localhost 25565 | grep "Connected")
-          if [ ! -z "$TELNET_STATUS" ]; then
+          python .github/test.py
+          if [ $? -eq 0 ]; then
             echo "Port 25565 is open and accessible from the host."
             break
           fi
