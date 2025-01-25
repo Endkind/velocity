@@ -84,7 +84,7 @@ jobs:
           fi
 
           # Check if port 25565 is open
-          python .github/test.py
+          .venv/bin/python .github/test.py
           if [ $? -eq 0 ]; then
             echo "Port 25565 is open and accessible from the host."
             break
