@@ -53,10 +53,19 @@ You can customize your Velocity server by setting the following environment vari
 
 These environment variables allow you to tailor your Velocity server's configuration to your specific requirements. You can adjust memory allocation, specify custom Java flags, and configure various server settings to suit your needs.
 
+## How to build
+
+Replace `<version>` with the desired version.
+
+```bash
+docker build --build-arg VELOCITY_VERSION=<version> -t endkind/velocity:<version> .
+```
+
 ## Additional Information
 
 - [GitHub Repository](https://github.com/Endkind/velocity)
 - [Docker Repository](https://hub.docker.com/r/endkind/velocity)
+- [Docker Compose Example](https://github.com/Endkind/velocity/blob/main/docker-compose.yml)
 - [Visit our website](https://www.endkind.net) for more information about our projects and services.
 - Connect to our Minecraft server (crossplay) at `mc.endkind.net` and start your adventure!
 
