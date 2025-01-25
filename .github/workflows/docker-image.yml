@@ -61,7 +61,7 @@ jobs:
 
     - name: Prepare Test
       run: |
-        pip install .github/requirements.txt
+        pip install -r .github/requirements.txt
 
     - name: Test the Docker image
       run: |
