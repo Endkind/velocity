@@ -33,6 +33,7 @@ By specifying a version like 3.2.0-SNAPSHOT, you ensure that your server runs a 
 ### All Supported Cersions
 
 - `latest` uses always the newest version
+- `3.3.0-SNAPSHOT`
 - `3.2.0-SNAPSHOT`
 - `3.1.2-SNAPSHOT`
 - `3.1.1-SNAPSHOT`
