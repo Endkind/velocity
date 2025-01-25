@@ -1,0 +1,16 @@
+services:
+    velocity:
+        stdin_open: true
+        tty: true
+        ports:
+            - 25565:25577
+        container_name: endkind-velocity
+        volumes:
+            - endkind-velocity:/velocity
+        environment:
+            - MAX_RAM=1G
+        restart: always
+        image: endkind/velocity:latest
+
+volumes:
+    endkind-velocity:
