@@ -66,6 +66,7 @@ jobs:
           echo "PORT=25577" >> $GITHUB_ENV
         else
           echo "PORT=25565" >> $GITHUB_ENV
+        fi
 
     - name: Load Docker image
       run: docker load < image.tar
