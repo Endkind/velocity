@@ -28,7 +28,15 @@ When deploying your server for production or if you require version stability, c
 docker run -it -d -p 25565:25577 --name endkind-velocity endkind/velocity:3.2.0-SNAPSHOT
 ```
 
-By specifying a version like 3.2.0-SNAPSHOT, you ensure that your server runs a known and tested version of Velocity.
+In version `3.2.0-SNAPSHOT` and earlier, the internal port used by Velocity is `25577`. Make sure to map the ports accordingly when using these versions.
+
+### Velocity 3.3.0-SNAPSHOT
+
+```bash
+docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.3.0-SNAPSHOT
+```
+
+Starting from version `3.3.0-SNAPSHOT`, the internal port has been updated to `25565`. Adjust your configurations if you are upgrading from an earlier version.
 
 ### All Supported Cersions
 

@@ -59,6 +59,14 @@ jobs:
         VERSION=$(echo $VERSION | sed 's/^v//')
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+    - name: Determine port
+      id: determine-port
+      run: |
+        if [[ "$VERSION" =~ ^(3\.2\.0-SNAPSHOT|3\.1\.2-SNAPSHOT|3\.1\.1-SNAPSHOT|3\.1\.1|3\.1\.0|1\.1\.9|1\.0\.10)$ ]]; then
+          echo "PORT=25577" >> $GITHUB_ENV
+        else
+          echo "PORT=25565" >> $GITHUB_ENV
+
     - name: Load Docker image
       run: docker load < image.tar
 
@@ -71,7 +79,7 @@ jobs:
     - name: Test the Docker image
       run: |
         # Start the container
-        CONTAINER_ID=$(docker run -it -d -p 25565:25577 endkind/velocity:$VERSION)
+        CONTAINER_ID=$(docker run -it -d -p 25565:$PORT endkind/velocity:$VERSION)
 
         # Wait for the container to initialize and check the port from the host
         MAX_RETRIES=60
