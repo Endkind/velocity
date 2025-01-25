@@ -61,6 +61,8 @@ jobs:
 
     - name: Prepare Test
       run: |
+        python -m venv .venv
+        source .venv/bin/activate
         pip install -r .github/requirements.txt
 
     - name: Test the Docker image
