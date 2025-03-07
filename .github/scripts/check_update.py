@@ -3,14 +3,14 @@ from helper import GithubHelper, PaperMCHelper
 if __name__ == "__main__":
     tags = GithubHelper.get_repo_tags()
     supportet_versions = []
-    papermc_versions = PaperMCHelper.get_project_versions("velocity")
+    velocity_versions = PaperMCHelper.get_project_versions("velocity")
 
     for i, tag in enumerate(tags):
         supportet_versions.append(tag[1:])
 
-    for version in papermc_versions:
+    for version in velocity_versions:
         if version not in supportet_versions:
-            title = f"New PaperMC version {version}!"
+            title = f"New Velocity version {version}!"
             open_issues = GithubHelper.get_open_issues()
             create_issue = True
 
