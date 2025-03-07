@@ -75,14 +75,10 @@ class GithubHelper:
     def get_open_issues(
         repo_owner: str = GithubConfig.REPO_OWNER,
         repo_name: str = GithubConfig.REPO_NAME,
-        token: str = GithubConfig.TOKEN,
     ):
         issues = []
         url = GithubHelper._get_base_repo_url(repo_owner, repo_name) / "issues"
-        headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": f"token {token}",
-        }
+        headers = {"Accept": "application/vnd.github.v3+json"}
         params = {"state": "open"}
 
         response = requests.get(url, headers=headers, params=params)
@@ -96,7 +92,7 @@ class GithubHelper:
             return issues
         else:
             print(
-                f'Error while creating the issue. Status code: "{response.status_code}". URL: "{url}"'
+                f'Error while getting the open issues. Status code: "{response.status_code}". URL: "{url}"'
             )
             print(json)
-            return False
+            return []
