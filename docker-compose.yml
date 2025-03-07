@@ -1,20 +1,19 @@
 services:
-    velocity:
-        stdin_open: true
-        tty: true
-        ports:
-            - 25565:25565
-        container_name: endkind-velocity
-        volumes:
-            - endkind-velocity:/velocity
-        environment:
-            - MAX_RAM=1G
-        restart: always
-        image: endkind/velocity:latest
+  velocity:
+    stdin_open: true
+    tty: true
+    ports:
+      - 25565:25565
+    container_name: endkind-velocity
+    volumes:
+      - endkind-velocity:/velocity
+    environment:
+      - MAX_RAM=1G
+    restart: always
+    image: endkind/velocity:latest
 
 volumes:
-    endkind-velocity:
-
+  endkind-velocity:
 # Note:
 # If you are using version 3.2.0-SNAPSHOT or earlier, you must use the mapping "25565:25577" in the ports section.
 # Starting from version 3.3.0-SNAPSHOT, the mapping "25565:25565" should be used as the internal port has changed.

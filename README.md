@@ -67,6 +67,7 @@ These environment variables allow you to tailor your Velocity server's configura
 
 Replace `<version>` with the desired version.
 
+<!-- prettier-ignore -->
 ```bash
 docker build --build-arg VELOCITY_VERSION=<version> -t endkind/velocity:<version> .
 ```
