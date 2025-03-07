@@ -89,7 +89,14 @@ class GithubHelper:
 
         json = response.json()
 
-        for entry in json:
-            issues.append(entry)
+        if response.status_code == 200:
+            for entry in json:
+                issues.append(entry)
 
-        return issues
+            return issues
+        else:
+            print(
+                f'Error while creating the issue. Status code: "{response.status_code}". URL: "{url}"'
+            )
+            print(json)
+            return False
