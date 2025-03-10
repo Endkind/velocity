@@ -24,5 +24,7 @@ jobs:
           pip install -r .github/scripts/requirements_check_update.txt
 
       - name: Check for updates
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           .venv/bin/python .github/scripts/check_update.py
