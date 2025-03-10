@@ -51,10 +51,14 @@ class GithubHelper:
     def get_repo_tags(
         repo_owner: str = GithubConfig.REPO_OWNER,
         repo_name: str = GithubConfig.REPO_NAME,
+        token: str = GithubConfig.TOKEN,
     ) -> List[str]:
         tags = []
         url = GithubHelper._get_base_repo_url(repo_owner, repo_name) / "tags"
-        headers = {"Accept": "application/vnd.github.v3+json"}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"token {token}",
+            }
 
         while True:
             response = requests.get(url, headers=headers)
@@ -75,10 +79,14 @@ class GithubHelper:
     def get_open_issues(
         repo_owner: str = GithubConfig.REPO_OWNER,
         repo_name: str = GithubConfig.REPO_NAME,
+        token: str = GithubConfig.TOKEN,
     ):
         issues = []
         url = GithubHelper._get_base_repo_url(repo_owner, repo_name) / "issues"
-        headers = {"Accept": "application/vnd.github.v3+json"}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"token {token}",
+            }
         params = {"state": "open"}
 
         response = requests.get(url, headers=headers, params=params)
