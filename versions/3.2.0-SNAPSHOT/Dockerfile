@@ -3,12 +3,12 @@ FROM python:3.13-slim AS build
 ARG VERSION=3.2.0-SNAPSHOT
 ARG BUILD=latest
 
-COPY get-folia.py get-folia.py
+COPY get-velocity.py get-velocity.py
 COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-RUN python get-folia.py --version $VERSION --build $BUILD --output /endkind/server.jar
+RUN python get-velocity.py --version $VERSION --build $BUILD --output /endkind/server.jar
 
 FROM eclipse-temurin:latest AS runtime
 
