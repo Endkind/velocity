@@ -38,9 +38,12 @@ docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.3.0-
 
 Starting from version `3.3.0-SNAPSHOT`, the internal port has been updated to `25565`. Adjust your configurations if you are upgrading from an earlier version.
 
-### All Supported Cersions
+### All Supported Versions
 
 - `latest` uses always the newest version
+- `3.5.0`
+- `3.5.0-SNAPSHOT`
+- `3.4.0`
 - `3.4.0-SNAPSHOT`
 - `3.3.0-SNAPSHOT`
 - `3.2.0-SNAPSHOT`
