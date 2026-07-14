@@ -1,11 +1,11 @@
-# Velocity - 3.6.0
+# Velocity - 3.6.0-SNAPSHOT
 
 This Docker image provides Velocity Minecraft Proxy versions. You can easily run a Minecraft Proxy using this image.
 
 ## Quick start
 
 ```bash
-docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.6.0
+docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.6.0-SNAPSHOT
 ```
 
 This command starts a Velocity server in detached mode (-d), maps port 25565 from the host to the container.
@@ -15,7 +15,7 @@ This command starts a Velocity server in detached mode (-d), maps port 25565 fro
 ```bash
 docker volume create endkind-velocity
 
-docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/velocity --restart=always endkind/velocity:3.6.0
+docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/velocity --restart=always endkind/velocity:3.6.0-SNAPSHOT
 ```
 
 ## Environment variables
@@ -34,7 +34,7 @@ These environment variables allow you to tailor your Velocity server's configura
 
 <!-- prettier-ignore -->
 ```bash
-docker build -t endkind/velocity:3.6.0 .
+docker build -t endkind/velocity:3.6.0-SNAPSHOT .
 ```
 
 ## Additional Information

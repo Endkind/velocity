@@ -1,6 +1,6 @@
 FROM python:3.13-slim AS build
 
-ARG VERSION=3.6.0
+ARG VERSION=3.6.0-SNAPSHOT
 ARG BUILD=latest
 
 COPY get-velocity.py get-velocity.py
