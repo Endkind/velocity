@@ -1,11 +1,11 @@
-# Velocity - All Versions
+# Velocity - 3.6.0
 
 This Docker image provides Velocity Minecraft Proxy versions. You can easily run a Minecraft Proxy using this image.
 
 ## Quick start
 
 ```bash
-docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:latest
+docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.6.0
 ```
 
 This command starts a Velocity server in detached mode (-d), maps port 25565 from the host to the container.
@@ -15,53 +15,15 @@ This command starts a Velocity server in detached mode (-d), maps port 25565 fro
 ```bash
 docker volume create endkind-velocity
 
-docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/velocity --restart=always endkind/velocity:latest
+docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/velocity --restart=always endkind/velocity:3.6.0
 ```
-
-## Using Specific Versions
-
-When deploying your server for production or if you require version stability, consider using specific image versions. For example:
-
-### Velocity 3.2.0-SNAPSHOT
-
-```bash
-docker run -it -d -p 25565:25577 --name endkind-velocity endkind/velocity:3.2.0-SNAPSHOT
-```
-
-In version `3.2.0-SNAPSHOT` and earlier, the internal port used by Velocity is `25577`. Make sure to map the ports accordingly when using these versions.
-
-### Velocity 3.3.0-SNAPSHOT
-
-```bash
-docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.3.0-SNAPSHOT
-```
-
-Starting from version `3.3.0-SNAPSHOT`, the internal port has been updated to `25565`. Adjust your configurations if you are upgrading from an earlier version.
-
-### All Supported Versions
-
-- `latest` uses always the newest version
-- `3.6.0`
-- `3.5.1`
-- `3.5.0`
-- `3.5.0-SNAPSHOT`
-- `3.4.0`
-- `3.4.0-SNAPSHOT`
-- `3.3.0-SNAPSHOT`
-- `3.2.0-SNAPSHOT`
-- `3.1.2-SNAPSHOT`
-- `3.1.1-SNAPSHOT`
-- `3.1.1`
-- `3.1.0`
-- `1.1.9`
-- `1.0.10`
 
 ## Environment variables
 
 You can customize your Velocity server by setting the following environment variables:
 
 - `MIN_RAM` (default: 32M) - Minimum RAM allocated for the server.
-- `MAX_RAM` (default: 512M) - Maximum RAM allocated for the server.
+- `MAX_RAM` (default: 3G) - Maximum RAM allocated for the server.
 - `JAVA_FLAGS` - Additional Java flags generated with [flags.sh](https://flags.sh/).
 - `VELOCITY_FLAGS` - Custom Velocity server flags.
 - `TZ` (example: Europe/Berlin) - Set the time zone for the server.
@@ -70,11 +32,9 @@ These environment variables allow you to tailor your Velocity server's configura
 
 ## How to build
 
-Replace `<version>` with the desired version.
-
 <!-- prettier-ignore -->
 ```bash
-docker build --build-arg VELOCITY_VERSION=<version> -t endkind/velocity:<version> .
+docker build -t endkind/velocity:3.6.0 .
 ```
 
 ## Additional Information
