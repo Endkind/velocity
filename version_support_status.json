@@ -1,0 +1,26 @@
+{
+    "generated_at": "2026-07-14T13:48:09.955321Z",
+    "counts": {
+        "supported": 9,
+        "unsupported": 7,
+        "disabled": 0
+    },
+    "versions": {
+        "4.0.0": "unsupported",
+        "4.0.0-SNAPSHOT": "unsupported",
+        "3.5.1": "unsupported",
+        "3.5.0": "unsupported",
+        "3.6.0-SNAPSHOT": "unsupported",
+        "3.5.0-SNAPSHOT": "unsupported",
+        "3.4.0": "unsupported",
+        "3.4.0-SNAPSHOT": "supported",
+        "3.3.0-SNAPSHOT": "supported",
+        "3.2.0-SNAPSHOT": "supported",
+        "3.1.2-SNAPSHOT": "supported",
+        "3.1.1": "supported",
+        "3.1.1-SNAPSHOT": "supported",
+        "3.1.0": "supported",
+        "1.1.9": "supported",
+        "1.0.10": "supported"
+    }
+}
