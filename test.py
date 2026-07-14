@@ -1,0 +1,144 @@
+import shutil
+import sys
+import time
+from pathlib import Path
+from typing import List
+from uuid import UUID, uuid4
+
+from docker.models.containers import Container
+from result import Err, Ok, Result, is_err, is_ok
+
+from config.project import ProjectConfig
+from config.test import TestConfig
+from utils import DockerHelper, MinecraftHelper, discover_versions
+
+
+def main():
+    if len(sys.argv) > 1:
+        versions = sys.argv[1:]
+        result = test_all(versions)
+    else:
+        result = test_all()
+
+    if is_ok(result):
+        print(f"Test process succeeded: {result.unwrap()}")
+    else:
+        print(f"Test process failed: {result.unwrap_err()}")
+        exit(1)
+
+
+def _setup_test_environment(path: Path = TestConfig.TEST_PATH) -> None:
+    DockerHelper.remove(TestConfig.CONTAINER_NAME, force=True)
+
+    if path.exists():
+        shutil.rmtree(path, ignore_errors=True)
+
+    path.mkdir(parents=True, exist_ok=True)
+    path.chmod(0o777)
+
+
+def _cleanup_test_environment(
+    container: Container, path: Path = TestConfig.TEST_PATH
+) -> None:
+    DockerHelper.remove(container, force=True)
+
+    shutil.rmtree(path, ignore_errors=True)
+
+
+def _get_internal_port(version: str) -> int:
+    internal_port_file = Path(__file__).parent / "versions" / version / "internal_port"
+
+    if internal_port_file.exists():
+        with internal_port_file.open("r") as file:
+            return int(file.read())
+
+    return 25565
+
+
+def test(tag: str) -> Result[str, str]:
+    uuid: UUID = uuid4()
+    path = TestConfig.TEST_PATH / str(uuid)
+    while path.exists():
+        uuid = uuid4()
+        path = TestConfig.TEST_PATH / str(uuid)
+
+    _setup_test_environment(path)
+    image_name = f"endkind/{ProjectConfig.PROJECT}:{tag}"
+
+    container = DockerHelper.create(
+        image_name,
+        container_name=TestConfig.CONTAINER_NAME,
+        ports=[(25565, _get_internal_port(tag))],
+        volumes=[(path, "/data")],
+        auto_remove=True,
+    )
+
+    if is_ok(container):
+        container = container.unwrap()
+    else:
+        return Err(container.unwrap_err())
+
+    try:
+        container.start()
+    except Exception as exc:
+        _cleanup_test_environment(container, path)
+        return Err(f"Container failed to start for image '{image_name}': {exc}")
+
+    time.sleep(5)
+
+    if not DockerHelper.is_running(
+        container,
+        attempts=TestConfig.ATTEMPTS,
+        attempt_delay=TestConfig.ATTEMPT_RETRY_DELAY,
+    ).unwrap_or(False):
+        _cleanup_test_environment(container, path)
+        return Err(f"Container failed to start for image '{image_name}'")
+
+    result = MinecraftHelper.is_minecraft_server_reachable(
+        "127.0.0.1",
+        25565,
+        TestConfig.ATTEMPTS,
+        TestConfig.ATTEMPT_RETRY_DELAY,
+    )
+
+    _cleanup_test_environment(container, path)
+
+    if is_err(result):
+        return Err(f"Minecraft Server is not reachable: {result.unwrap_err()}")
+
+    return Ok(f"Docker image '{image_name}' tested successfully")
+
+
+def test_all(versions: List[str] | None = None) -> Result[str, str]:
+    if versions is None:
+        versions = discover_versions()
+
+    if not versions:
+        return Err("No versions found")
+
+    print(f"Found {len(versions)} versions:")
+    for version in versions:
+        print(f" - {ProjectConfig.PROJECT}:{version}")
+
+    print("\nStarting tests...\n")
+
+    success_count = 0
+
+    for version in versions:
+        print(f"--- Testing {ProjectConfig.PROJECT}:{version} ---")
+        result = test(version)
+
+        if is_ok(result):
+            print(f"✅ {result.unwrap()}")
+            success_count += 1
+        else:
+            print(f"❌ {result.unwrap_err()}")
+        print()
+
+    if success_count < len(versions):
+        return Err(f"Test incomplete: only {success_count}/{len(versions)} succeeded")
+    return Ok(f"Test complete: {success_count}/{len(versions)} succeeded")
+
+
+if __name__ == "__main__":
+    main()
