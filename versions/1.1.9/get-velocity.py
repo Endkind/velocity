@@ -2,28 +2,35 @@
 
 import argparse
 import os
+from typing import Final
 
 import requests
 from result import Err, Ok, Result, is_err
 
+# region Configuration
+PROJECT: Final[str] = "velocity"
+DISPLAY_NAME: Final[str] = "Velocity"
+BASE_URL: Final[str] = f"https://fill.papermc.io/v3/projects/{PROJECT}"
+# endregion
+
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Velocity Download Script - Version and Build Parameters"
+        description=f"{DISPLAY_NAME} Download Script - Version and Build Parameters"
     )
 
     parser.add_argument(
         "--version",
         type=str,
         default=os.environ.get("VERSION", "latest"),
-        help='Minecraft Version (Default: environment variable VERSION or "latest")',
+        help=f'{DISPLAY_NAME} Version (Default: environment variable VERSION or "latest")',
     )
 
     parser.add_argument(
         "--build",
         type=str,
         default=os.environ.get("BUILD", "latest"),
-        help='Build Number (Default: environment variable BUILD or "latest")',
+        help=f'{DISPLAY_NAME} Build Number (Default: environment variable BUILD or "latest")',
     )
 
     parser.add_argument(
@@ -44,31 +51,28 @@ def main():
     else:
         version = args.version
 
-    if args.build == "latest":
-        build_result = get_latest_build(version)
-        if is_err(build_result):
-            print(f"Error: {build_result.unwrap_err()}")
-            exit(1)
-        build = build_result.unwrap()
-    else:
-        build = args.build
+    build = args.build
 
     print(f"Version: {version}")
     print(f"Build: {build}")
 
-    download_result = download_velocity(version, build, args.output)
+    download_result = download_server_jar(version, build, args.output)
     if is_err(download_result):
         print(f"Error: {download_result.unwrap_err()}")
         exit(1)
 
 
-def download_velocity(
+def download_server_jar(
     version: str, build: str, output: str = "server.jar"
 ) -> Result[None, str]:
-    base_url = "https://api.papermc.io/v2/projects/velocity"
-    download_url = f"{base_url}/versions/{version}/builds/{build}/downloads/velocity-{version}-{build}.jar"
+    download_meta_url = f"{BASE_URL}/versions/{version}/builds/{build}"  #
 
     try:
+        response = requests.get(download_meta_url)
+        response.raise_for_status()
+        data = response.json()
+        download_url = data["downloads"]["server:default"]["url"]
+
         output_dir = os.path.dirname(output)
         if output_dir:
             os.makedirs(output_dir, exist_ok=True)
@@ -86,34 +90,77 @@ def download_velocity(
 
 
 def get_latest_version() -> Result[str, str]:
-    base_url = "https://api.papermc.io/v2/projects/velocity"
+    versions = get_all_versions()
+
+    if versions.is_err():
+        return Err(versions.unwrap_err())
+
+    versions = versions.unwrap()
+
+    index = 0
+
+    while not has_builds(versions[index]).unwrap_or(False):
+        index += 1
+        if index >= len(versions):
+            return Err("No versions with builds found")
+
+    if len(versions) == 0:
+        return Err("No versions found")
+
+    return Ok(versions[index])
+
+
+def get_all_versions() -> Result[list[str], str]:
+    try:
+        response = requests.get(BASE_URL)
+    except requests.RequestException as error:
+        return Err(
+            f"Failed to fetch versions for project {PROJECT}. Request error: {error}"
+        )
+
+    if response.status_code != 200:
+        return Err(
+            f"Failed to fetch versions for project {PROJECT}. Status code: {response.status_code}"
+        )
 
     try:
-        response = requests.get(base_url)
-        response.raise_for_status()
-        data = response.json()
-        versions = data["versions"]
+        payload = response.json()
+    except ValueError as error:
+        return Err(
+            f"Failed to fetch versions for project {PROJECT}. Invalid JSON response: {error}"
+        )
 
-        for version in reversed(versions):
-            build_result = get_latest_build(version)
-            if not is_err(build_result):
-                return Ok(version)
+    versions_by_release = payload.get("versions")
+    if not isinstance(versions_by_release, dict):
+        return Err(
+            f"Failed to fetch versions for project {PROJECT}. Invalid response shape: missing or invalid 'versions' object"
+        )
 
-        return Err("No version with available builds found")
-    except Exception as e:
-        return Err(f"Error getting latest version: {e}")
+    all_versions = []
+
+    for release, versions in versions_by_release.items():
+        if not isinstance(versions, list) or not all(
+            isinstance(version, str) for version in versions
+        ):
+            return Err(
+                f"Failed to fetch versions for project {PROJECT}. Invalid versions list for release '{release}'"
+            )
+
+        all_versions.extend(versions)
+
+    return Ok(all_versions)
 
 
-def get_latest_build(version: str) -> Result[str, str]:
-    base_url = "https://api.papermc.io/v2/projects/velocity"
-
+def has_builds(version: str) -> Result[bool, str]:
+    print(version)
     try:
-        response = requests.get(f"{base_url}/versions/{version}")
+        response = requests.get(f"{BASE_URL}/versions/{version}")
         response.raise_for_status()
         data = response.json()
-        return Ok(str(data["builds"][-1]))
+        builds = data.get("builds", [])
+        return Ok(len(builds) > 0)
     except Exception as e:
-        return Err(f"Error getting latest build for version {version}: {e}")
+        return Err(f"Error checking builds for version {version}: {e}")
 
 
 if __name__ == "__main__":
