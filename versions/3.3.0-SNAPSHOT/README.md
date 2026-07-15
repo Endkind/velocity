@@ -23,7 +23,7 @@ docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/ve
 You can customize your Velocity server by setting the following environment variables:
 
 - `MIN_RAM` (default: 32M) - Minimum RAM allocated for the server.
-- `MAX_RAM` (default: 512M) - Maximum RAM allocated for the server.
+- `MAX_RAM` (default: 3G) - Maximum RAM allocated for the server.
 - `JAVA_FLAGS` - Additional Java flags generated with [flags.sh](https://flags.sh/).
 - `VELOCITY_FLAGS` - Custom Velocity server flags.
 - `TZ` (example: Europe/Berlin) - Set the time zone for the server.
