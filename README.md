@@ -58,6 +58,12 @@ Starting from version `3.3.0-SNAPSHOT`, the internal port has been updated to `2
 - `1.1.9`
 - `1.0.10`
 
+> [!CAUTION]
+> The following versions are no longer working. They are no longer actively maintained but remain available for manual building. For details about each version, see the respective README:
+> [3.5.0](./versions/3.5.0/README.md)
+>
+> For the latest support overview, check [Velocity Versions Overview](https://endkind.github.io/velocity/).
+
 ## Environment variables
 
 You can customize your Velocity server by setting the following environment variables:

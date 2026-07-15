@@ -1,11 +1,14 @@
-# Velocity - 3.5.0-SNAPSHOT
+# Velocity - 3.5.0
 
 This Docker image provides Velocity Minecraft Proxy versions. You can easily run a Minecraft Proxy using this image.
+
+> [!CAUTION]
+> This version is not buildable because its builds have been deleted from the PaperMC API. It is no longer actively maintained.
 
 ## Quick start
 
 ```bash
-docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.5.0-SNAPSHOT
+docker run -it -d -p 25565:25565 --name endkind-velocity endkind/velocity:3.5.0
 ```
 
 This command starts a Velocity server in detached mode (-d), maps port 25565 from the host to the container.
@@ -15,7 +18,7 @@ This command starts a Velocity server in detached mode (-d), maps port 25565 fro
 ```bash
 docker volume create endkind-velocity
 
-docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/velocity --restart=always endkind/velocity:3.5.0-SNAPSHOT
+docker run -it -d -p 25565:25565 --name endkind-velocity -v endkind-velocity:/velocity --restart=always endkind/velocity:3.5.0
 ```
 
 ## Environment variables
@@ -34,7 +37,7 @@ These environment variables allow you to tailor your Velocity server's configura
 
 <!-- prettier-ignore -->
 ```bash
-docker build -t endkind/velocity:3.5.0-SNAPSHOT .
+docker build -t endkind/velocity:3.5.0 .
 ```
 
 ## Additional Information
