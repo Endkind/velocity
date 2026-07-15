@@ -3,6 +3,9 @@ name: Check for updates
 on:
   schedule:
     - cron: "0 0 * * *"
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 permissions:
