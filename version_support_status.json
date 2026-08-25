@@ -1,11 +1,12 @@
 {
-    "generated_at": "2026-08-24T00:09:18.554511Z",
+    "generated_at": "2026-08-25T00:09:31.211143Z",
     "counts": {
         "supported": 16,
-        "unsupported": 0,
+        "unsupported": 1,
         "disabled": 1
     },
     "versions": {
+        "4.1.0": "unsupported",
         "4.1.0-SNAPSHOT": "supported",
         "4.0.0": "supported",
         "4.0.0-SNAPSHOT": "supported",
