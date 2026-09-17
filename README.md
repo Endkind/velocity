@@ -41,6 +41,7 @@ Starting from version `3.3.0-SNAPSHOT`, the internal port has been updated to `2
 ### All Supported Versions
 
 - `latest` uses always the newest version
+- `4.2.0`
 - `4.1.2-SNAPSHOT`
 - `4.1.1`
 - `4.1.1-SNAPSHOT`
